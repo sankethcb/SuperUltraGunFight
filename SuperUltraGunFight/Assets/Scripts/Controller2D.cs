@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Author: Dante Nardo
-/// Last Modified: 12/14/2017
+/// Last Modified: 12/15/2017
 /// Purpose: Handles the basic movement and collisions of all controllers.
 /// </summary>
 [RequireComponent(typeof(BoxCollider2D))]
@@ -111,23 +111,29 @@ public class Controller2D : MonoBehaviour
     {
         // Prepare origin and ray length for raycasting
         m_dirX = (int)Mathf.Sign(moveAmount.x);
-        float rayLength = Mathf.Abs(moveAmount.x) + m_buffer;
-        Vector2 rayBottomOrigin = (m_dirX == 1) ? m_raycastOrigins.m_bottomRight : m_raycastOrigins.m_bottomLeft;
-        Vector2 rayTopOrigin = (m_dirX == 1) ? m_raycastOrigins.m_topRight : m_raycastOrigins.m_topLeft;
+        float width = m_raycastOrigins.m_bottomRight.x - m_raycastOrigins.m_bottomLeft.x;
+        float bottomRayLength = Mathf.Abs(moveAmount.x) + m_buffer + width;
+        float topRayLength = Mathf.Abs(moveAmount.x) + m_buffer + width;
+
+        // If moving right, use left coordinates
+        // If moving left, use right coordinates
+        // This acts as a buffer to detect edges better
+        Vector2 rayBottomOrigin = (m_dirX == 1) ? m_raycastOrigins.m_bottomLeft : m_raycastOrigins.m_bottomRight;
+        Vector2 rayTopOrigin = (m_dirX == 1) ? m_raycastOrigins.m_topLeft : m_raycastOrigins.m_topRight;
 
         // Raycast and process hit
-        RaycastHit2D bHit = Physics2D.Raycast(rayBottomOrigin, Vector2.right * m_dirX, rayLength, m_collisionMask);
-        RaycastHit2D tHit = Physics2D.Raycast(rayBottomOrigin, Vector2.right * m_dirX, rayLength, m_collisionMask);
+        RaycastHit2D bHit = Physics2D.Raycast(rayBottomOrigin, Vector2.right * m_dirX, bottomRayLength, m_collisionMask);
+        RaycastHit2D tHit = Physics2D.Raycast(rayTopOrigin, Vector2.right * m_dirX, topRayLength, m_collisionMask);
 
         if (bHit && bHit.distance != 0)
         {
-            moveAmount.x = (bHit.distance - m_buffer) * m_dirX;
+            moveAmount.x = (bHit.distance - m_buffer - width) * m_dirX;
             m_collisions.m_left = m_dirX == -1;
             m_collisions.m_right = m_dirX == 1;
         }
         else if (tHit && tHit.distance != 0)
         {
-            moveAmount.x = (tHit.distance - m_buffer) * m_dirX;
+            moveAmount.x = (tHit.distance - m_buffer - width) * m_dirX;
             m_collisions.m_left = m_dirX == -1;
             m_collisions.m_right = m_dirX == 1;
         }
@@ -137,28 +143,37 @@ public class Controller2D : MonoBehaviour
     {
         // Prepare origin and ray length for raycasting
         m_dirY = (int)Mathf.Sign(moveAmount.y);
-        float rayLength = Mathf.Abs(moveAmount.y) + m_buffer;
-        Vector2 rayLeftOrigin = (m_dirY == 1) ? m_raycastOrigins.m_topLeft : m_raycastOrigins.m_bottomLeft;
-        Vector2 rayRightOrigin = (m_dirY == 1) ? m_raycastOrigins.m_topRight : m_raycastOrigins.m_bottomRight;
+        float height = m_raycastOrigins.m_topRight.y - m_raycastOrigins.m_bottomRight.y;
+        float leftRayLength = Mathf.Abs(moveAmount.y) + m_buffer + height;
+        float rightRayLength = Mathf.Abs(moveAmount.y) + m_buffer + height;
+
+        // If moving up, use bottom coordinates
+        // If moving down, use top coordinates
+        // This acts as a buffer to detect edges better
+        Vector2 rayLeftOrigin = (m_dirY == 1) ? m_raycastOrigins.m_bottomLeft : m_raycastOrigins.m_topLeft;
+        Vector2 rayRightOrigin = (m_dirY == 1) ? m_raycastOrigins.m_bottomRight : m_raycastOrigins.m_topRight;
 
         // Raycast and process hit
-        RaycastHit2D lHit = Physics2D.Raycast(rayLeftOrigin, Vector2.up * m_dirY, rayLength, m_collisionMask);
-        RaycastHit2D rHit = Physics2D.Raycast(rayRightOrigin, Vector2.up * m_dirY, rayLength, m_collisionMask);
+        // Use bottom origin for top hit and top origin for bottom hit
+        // This acts as a buffer so that the player can detect stuff farther in advance
+        RaycastHit2D lHit = Physics2D.Raycast(rayLeftOrigin, Vector2.up * m_dirY, leftRayLength, m_collisionMask);
+        RaycastHit2D rHit = Physics2D.Raycast(rayRightOrigin, Vector2.up * m_dirY, rightRayLength, m_collisionMask);
 
         if (lHit && lHit.distance != 0)
         {
-            moveAmount.y = (lHit.distance - m_buffer) * m_dirY;
+            moveAmount.y = (lHit.distance - m_buffer - height) * m_dirY;
             m_collisions.m_below = m_dirY == -1;
             m_collisions.m_above = m_dirY == 1;
         }
         else if (rHit && rHit.distance != 0)
         {
-            moveAmount.y = (rHit.distance - m_buffer) * m_dirY;
+            moveAmount.y = (rHit.distance - m_buffer - height) * m_dirY;
             m_collisions.m_below = m_dirY == -1;
             m_collisions.m_above = m_dirY == 1;
         }
 
-        if (m_collisions.m_below && (lHit.distance <= m_buffer*2 || rHit.distance <= m_buffer*2))
+        // Detect ground/finish jumping
+        if (m_collisions.m_below && (lHit.distance - height <= m_buffer*2 || rHit.distance - height <= m_buffer*2))
         {
             m_grounded = true;
             m_canJump = true;

@@ -36,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1359647838282774}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -88,8 +88,8 @@ MonoBehaviour:
   SPEED_BOOST: 1.75
   HIGH_FRICTION: 1
   LOW_FRICTION: 0.25
-  m_groundFactor: 0.1
-  m_airFactor: 0.75
+  m_groundFactor: 0.01
+  m_airFactor: 0.01
   MAX_JUMP_TIME: 30
   JUMP_START: 1
   JUMP_RATE: 0.25
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_mass: 1
   m_gravity: 20
   m_friction: 0.5
-  m_speed: 10
+  m_speed: 5
   m_jumpTime: 0
   m_dirX: 0
   m_dirY: 0
