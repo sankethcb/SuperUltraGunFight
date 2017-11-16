@@ -41,15 +41,8 @@ public class Controller2D : MonoBehaviour
     public float m_maxJumpVelocity = 10.5f;
     public float m_minJumpVelocity = 0.3f;
 
-    public float SPEED_BOOST = 1.75f;
-    public float HIGH_FRICTION = 5.0f;
-    public float LOW_FRICTION = 2.0f;
-    public float m_groundFactor = 1.0f;
-    public float m_airFactor = 0.75f;
-
-    public int MAX_JUMP_TIME = 30;
-    public float JUMP_START = 1.0f;
-    public float JUMP_RATE = 0.25f;
+    public float m_groundFactor = 0.01f;
+    public float m_airFactor = 0.05f;
 
     protected CollisionInfo m_collisions;           // A struct for collision data
     protected BoxCollider2D m_collider;             // The bounding box of the sprite
@@ -62,9 +55,7 @@ public class Controller2D : MonoBehaviour
     protected Vector2 m_velocity;                   // Determines how quickly we change position
     protected Vector2 m_acceleration;               // Determines how quickly we change velocity
     public float m_gravity;                         // Gravity value to increase negative velocity
-    public float m_friction;                        // Friction value to negate velocity
     public float m_speed;                           // Speed value to add to velocity
-    public int m_jumpTime;                          // Current jump time
     public int m_dirX;                              // Current direction the controller is moving : 1 is right, -1 is left
     public int m_dirY;                              // Current direction the controller is moving : 1 is up, -1 is down
 
@@ -191,19 +182,6 @@ public class Controller2D : MonoBehaviour
         m_grounded = false;
     }
 
-    protected void ApplyFriction()
-    {
-        if (m_acceleration.x != 0)
-        {
-            int dir = -(int)Mathf.Sign(m_acceleration.x);
-            float frictionForce = m_gravity * m_friction;
-            frictionForce = Mathf.Clamp(frictionForce, 0, Mathf.Abs(m_acceleration.x / 4));
-            frictionForce *= dir;
-            Vector2 friction = new Vector2(frictionForce, 0);
-            //AddForce(friction);
-        }
-    }
-
     protected void CalculateRaycastOrigins()
     {
         Bounds bounds = m_collider.bounds;
@@ -257,36 +235,36 @@ public class Controller2D : MonoBehaviour
     /// <summary>
     /// No longer used, but necessary TODO the edge cases.
     /// </summary>
-    protected virtual void Jump()
-    {
-        // If we just jumped set the starting values
-        if (!m_jumping && m_collisions.m_below && m_canJump)
-        {
-            m_velocity.y = JUMP_START - m_gravity;
-            m_jumpTime = 0;
-            m_jumping = true;
-            m_jumpTime++;
-            return;
-        }
+    //protected virtual void Jump()
+    //{
+    //    // If we just jumped set the starting values
+    //    if (!m_jumping && m_collisions.m_below && m_canJump)
+    //    {
+    //        m_velocity.y = JUMP_START - m_gravity;
+    //        m_jumpTime = 0;
+    //        m_jumping = true;
+    //        m_jumpTime++;
+    //        return;
+    //    }
 
-        // EDGE CASE: Players pressing jump momentarily before
-        // they touch the ground. We start a Coroutine that
-        // makes them jump once they hit the ground
-        if (ControllerNearGround())
-            StartCoroutine(JumpOnGroundHit());
+    //    // EDGE CASE: Players pressing jump momentarily before
+    //    // they touch the ground. We start a Coroutine that
+    //    // makes them jump once they hit the ground
+    //    if (ControllerNearGround())
+    //        StartCoroutine(JumpOnGroundHit());
 
-        // EDGE CASE: Players pressing jump momentarily after 
-        // they leave touch the ground. We treat this as if the
-        // player just jumped normally
-        if (ControllerJustFell())
-        {
-            m_velocity.y = JUMP_START - m_gravity;
-            m_jumpTime = 0;
-            m_jumping = true;
-            m_jumpTime++;
-            return;
-        }
-    }
+    //    // EDGE CASE: Players pressing jump momentarily after 
+    //    // they leave touch the ground. We treat this as if the
+    //    // player just jumped normally
+    //    if (ControllerJustFell())
+    //    {
+    //        m_velocity.y = JUMP_START - m_gravity;
+    //        m_jumpTime = 0;
+    //        m_jumping = true;
+    //        m_jumpTime++;
+    //        return;
+    //    }
+    //}
 
     // TODO: Implement controller near ground detection
     private bool ControllerNearGround()

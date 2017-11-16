@@ -2,7 +2,7 @@
 
 /// <summary>
 /// Author: Dante Nardo
-/// Last Modified: 11/14/2017
+/// Last Modified: 11/15/2017
 /// Purpose: Adds player specific controls and jump to the Controller2D.
 /// </summary>
 public class PlayerController : Controller2D
@@ -33,10 +33,10 @@ public class PlayerController : Controller2D
             Input.GetAxisRaw(m_iHorizontal), 
             Input.GetAxisRaw(m_iVertical));
         
-        if (Input.GetButtonDown(m_iJump) && m_canJump)
+        if (Input.GetButtonDown(m_iJump) && m_canJump && m_grounded)
             JumpInputDown();
 
-        if (Input.GetButtonUp(m_iJump) && m_canJump)
+        if (Input.GetButtonUp(m_iJump) && m_canJump && m_grounded)
             JumpInputUp();
     }
 
