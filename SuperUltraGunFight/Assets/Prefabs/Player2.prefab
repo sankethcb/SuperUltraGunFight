@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114001452543790906}
   m_Layer: 0
   m_Name: Player2
-  m_TagString: Untagged
+  m_TagString: Player2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,7 +81,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_player: {fileID: 114094089463976550}
   m_fireKey: P2_Fire
-  m_bullet: {fileID: 1888594214103558, guid: 2d6e36857941a09429dd0deed9749f74, type: 2}
+  m_fire2Key: P2_Fire2
+  m_bullet: {fileID: 1888594214103558, guid: c9ecb76fa5a94ee49afd84a8750f5aa5, type: 2}
+  m_grenade: {fileID: 1888594214103558, guid: 2d6e36857941a09429dd0deed9749f74, type: 2}
   m_fireRate: 1
   m_bulletSpeed: 75
 --- !u!114 &114094089463976550

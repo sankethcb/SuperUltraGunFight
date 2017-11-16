@@ -16,7 +16,8 @@ public class Bullet : MonoBehaviour
     {
         if (collision.collider.gameObject.tag == m_killTag)
         {
-            Destroy(collision.collider.gameObject);
+            collision.gameObject.transform.position = new Vector3(0, 6, 0);
+            //Destroy(collision.collider.gameObject);
         }
     }
     #endregion
