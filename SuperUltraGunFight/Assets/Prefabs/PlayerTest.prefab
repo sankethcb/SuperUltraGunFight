@@ -81,7 +81,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_player: {fileID: 114741073431274248}
   m_fireKey: P1_Fire
+  m_fire2Key: 
   m_bullet: {fileID: 1888594214103558, guid: 844e0c5e7a6f4c44ca180db07099114b, type: 2}
+  m_grenade: {fileID: 0}
   m_fireRate: 1
   m_bulletSpeed: 80
 --- !u!114 &114741073431274248
