@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Author: Dante Nardo
-/// Last Modified: 12/15/2017
+/// Last Modified: 11/29/2017
 /// Purpose: Handles the basic movement and collisions of all controllers.
 /// </summary>
 [RequireComponent(typeof(BoxCollider2D))]
@@ -16,6 +16,8 @@ public class Controller2D : MonoBehaviour
     {
         public Vector2 m_topLeft, m_topRight;
         public Vector2 m_bottomLeft, m_bottomRight;
+        public float m_horizontalSpacing, m_verticalSpacing;
+        public int m_horizontalCount, m_verticalCount;
     }
 
     // Syntax sugar and struct to keep family of data
@@ -46,9 +48,10 @@ public class Controller2D : MonoBehaviour
 
     protected CollisionInfo m_collisions;           // A struct for collision data
     protected BoxCollider2D m_collider;             // The bounding box of the sprite
-    protected RaycastOrigins m_raycastOrigins;      // The four corners to raycast from
+    protected RaycastOrigins m_rayInfo;             // The four corners to raycast from, the ray spacing, and raycount
     public LayerMask m_collisionMask;               // The layer which we detect collisions on
     public const float m_buffer = .015f;            // A buffer for raycasting
+    public const float m_rayDistance = .25f;        // The distance between each ray
 
     public float m_mass;                            // The mass of the object
     protected Vector2 m_input;                      // Input values from gamepad/keyboard
@@ -75,6 +78,7 @@ public class Controller2D : MonoBehaviour
     private void Start()
     {
         CalculateRaycastOrigins();
+        CalculateRaycastCount();
     }
 
     protected void Move(Vector2 moveAmount)
@@ -86,14 +90,18 @@ public class Controller2D : MonoBehaviour
 
         // Set facing direction
         if (m_input.x != 0)
+        {
             m_dirX = (int)Mathf.Sign(moveAmount.x);
+        }
         
-        // Check for horizontal collisions if necessary
+        // Check for horizontal collisions - always necessary
         HorizontalCollisions(ref moveAmount);
 
         // Check for vertical collisions if necessary
         if (moveAmount.y != 0)
+        {
             VerticalCollisions(ref moveAmount);
+        }
 
         transform.Translate(moveAmount);
     }
@@ -101,32 +109,29 @@ public class Controller2D : MonoBehaviour
     protected void HorizontalCollisions(ref Vector2 moveAmount)
     {
         // Prepare origin and ray length for raycasting
-        m_dirX = (int)Mathf.Sign(moveAmount.x);
-        float width = m_raycastOrigins.m_bottomRight.x - m_raycastOrigins.m_bottomLeft.x;
-        float bottomRayLength = Mathf.Abs(moveAmount.x) + m_buffer + width;
-        float topRayLength = Mathf.Abs(moveAmount.x) + m_buffer + width;
-
-        // If moving right, use left coordinates
-        // If moving left, use right coordinates
-        // This acts as a buffer to detect edges better
-        Vector2 rayBottomOrigin = (m_dirX == 1) ? m_raycastOrigins.m_bottomLeft : m_raycastOrigins.m_bottomRight;
-        Vector2 rayTopOrigin = (m_dirX == 1) ? m_raycastOrigins.m_topLeft : m_raycastOrigins.m_topRight;
-
-        // Raycast and process hit
-        RaycastHit2D bHit = Physics2D.Raycast(rayBottomOrigin, Vector2.right * m_dirX, bottomRayLength, m_collisionMask);
-        RaycastHit2D tHit = Physics2D.Raycast(rayTopOrigin, Vector2.right * m_dirX, topRayLength, m_collisionMask);
-
-        if (bHit && bHit.distance != 0)
+        if (moveAmount.x != 0)
         {
-            moveAmount.x = (bHit.distance - m_buffer - width) * m_dirX;
-            m_collisions.m_left = m_dirX == -1;
-            m_collisions.m_right = m_dirX == 1;
+            m_dirX = (int)Mathf.Sign(moveAmount.x);
         }
-        else if (tHit && tHit.distance != 0)
+        float width = m_rayInfo.m_bottomRight.x - m_rayInfo.m_bottomLeft.x;
+        float rayLength = Mathf.Abs(moveAmount.x) + m_buffer + width;
+
+        // Complete all horizontal raycasts
+        for (int i = 0; i < m_rayInfo.m_horizontalCount; i++)
         {
-            moveAmount.x = (tHit.distance - m_buffer - width) * m_dirX;
-            m_collisions.m_left = m_dirX == -1;
-            m_collisions.m_right = m_dirX == 1;
+            // Update origin for each ray
+            Vector2 rayOrigin = (m_dirX == 1) ? m_rayInfo.m_bottomLeft : m_rayInfo.m_bottomRight;
+            rayOrigin += Vector2.up * (m_rayInfo.m_horizontalSpacing * i);
+
+            // Raycast and process hit
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * m_dirX, rayLength, m_collisionMask);
+            if (hit && hit.distance != 0)
+            {
+                moveAmount.x = (hit.distance - m_buffer - width) * m_dirX;
+                rayLength = hit.distance;
+                m_collisions.m_left = m_dirX == -1;
+                m_collisions.m_right = m_dirX == 1;
+            }
         }
     }
 
@@ -134,41 +139,33 @@ public class Controller2D : MonoBehaviour
     {
         // Prepare origin and ray length for raycasting
         m_dirY = (int)Mathf.Sign(moveAmount.y);
-        float height = m_raycastOrigins.m_topRight.y - m_raycastOrigins.m_bottomRight.y;
-        float leftRayLength = Mathf.Abs(moveAmount.y) + m_buffer + height;
-        float rightRayLength = Mathf.Abs(moveAmount.y) + m_buffer + height;
+        float height = m_rayInfo.m_topRight.y - m_rayInfo.m_bottomRight.y;
+        float rayLength = Mathf.Abs(moveAmount.y) + m_buffer + height;
 
-        // If moving up, use bottom coordinates
-        // If moving down, use top coordinates
-        // This acts as a buffer to detect edges better
-        Vector2 rayLeftOrigin = (m_dirY == 1) ? m_raycastOrigins.m_bottomLeft : m_raycastOrigins.m_topLeft;
-        Vector2 rayRightOrigin = (m_dirY == 1) ? m_raycastOrigins.m_bottomRight : m_raycastOrigins.m_topRight;
-
-        // Raycast and process hit
-        // Use bottom origin for top hit and top origin for bottom hit
-        // This acts as a buffer so that the player can detect stuff farther in advance
-        RaycastHit2D lHit = Physics2D.Raycast(rayLeftOrigin, Vector2.up * m_dirY, leftRayLength, m_collisionMask);
-        RaycastHit2D rHit = Physics2D.Raycast(rayRightOrigin, Vector2.up * m_dirY, rightRayLength, m_collisionMask);
-
-        if (lHit && lHit.distance != 0)
+        // Complete all vertical raycasts
+        for (int i = 0; i < m_rayInfo.m_verticalCount; i++)
         {
-            moveAmount.y = (lHit.distance - m_buffer - height) * m_dirY;
-            m_collisions.m_below = m_dirY == -1;
-            m_collisions.m_above = m_dirY == 1;
-        }
-        else if (rHit && rHit.distance != 0)
-        {
-            moveAmount.y = (rHit.distance - m_buffer - height) * m_dirY;
-            m_collisions.m_below = m_dirY == -1;
-            m_collisions.m_above = m_dirY == 1;
-        }
+            // Update origin for each ray
+            Vector2 rayOrigin = (m_dirY == 1) ? m_rayInfo.m_bottomLeft : m_rayInfo.m_topLeft;
+            rayOrigin += Vector2.right * (m_rayInfo.m_verticalSpacing * i);
 
-        // Detect ground/finish jumping
-        if (m_collisions.m_below && (lHit.distance - height <= m_buffer*2 || rHit.distance - height <= m_buffer*2))
-        {
-            m_grounded = true;
-            m_canJump = true;
-            m_jumping = false;
+            // Raycast and process hit
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * m_dirY, rayLength, m_collisionMask);
+            if (hit && hit.distance != 0)
+            {
+                moveAmount.y = (hit.distance - m_buffer - height) * m_dirY;
+                rayLength = hit.distance;
+                m_collisions.m_below = m_dirY == -1;
+                m_collisions.m_above = m_dirY == 1;
+            }
+
+            // Detect ground/finish jumping
+            if (m_collisions.m_below && (hit.distance - height <= m_buffer * 2))
+            {
+                m_grounded = true;
+                m_canJump = true;
+                m_jumping = false;
+            }
         }
     }
 
@@ -187,10 +184,22 @@ public class Controller2D : MonoBehaviour
         Bounds bounds = m_collider.bounds;
         bounds.Expand(m_buffer * -2);
 
-        m_raycastOrigins.m_bottomLeft = new Vector2(m_collider.bounds.min.x, m_collider.bounds.min.y);
-        m_raycastOrigins.m_bottomRight = new Vector2(m_collider.bounds.max.x, m_collider.bounds.min.y);
-        m_raycastOrigins.m_topLeft = new Vector2(m_collider.bounds.min.x, m_collider.bounds.max.y);
-        m_raycastOrigins.m_topRight = new Vector2(m_collider.bounds.max.x, m_collider.bounds.max.y);
+        m_rayInfo.m_bottomLeft = new Vector2(m_collider.bounds.min.x, m_collider.bounds.min.y);
+        m_rayInfo.m_bottomRight = new Vector2(m_collider.bounds.max.x, m_collider.bounds.min.y);
+        m_rayInfo.m_topLeft = new Vector2(m_collider.bounds.min.x, m_collider.bounds.max.y);
+        m_rayInfo.m_topRight = new Vector2(m_collider.bounds.max.x, m_collider.bounds.max.y);
+    }
+
+    protected void CalculateRaycastCount()
+    {
+        Bounds bounds = m_collider.bounds;
+        bounds.Expand(m_buffer * -2);
+
+        m_rayInfo.m_horizontalCount = Mathf.RoundToInt(bounds.size.y / m_rayDistance);
+        m_rayInfo.m_verticalCount = Mathf.RoundToInt(bounds.size.x / m_rayDistance);
+
+        m_rayInfo.m_horizontalSpacing = bounds.size.y / (m_rayInfo.m_horizontalCount - 1);
+        m_rayInfo.m_verticalSpacing = bounds.size.x / (m_rayInfo.m_verticalCount - 1);
     }
 
     #region Velocity Methods
