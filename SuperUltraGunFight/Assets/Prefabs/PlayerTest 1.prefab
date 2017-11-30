@@ -24,10 +24,9 @@ GameObject:
   - component: {fileID: 114741073431274248}
   - component: {fileID: 114177702210541788}
   - component: {fileID: 95519410456451228}
-  - component: {fileID: 114492979215944292}
   m_Layer: 0
-  m_Name: PlayerTest
-  m_TagString: Player1
+  m_Name: PlayerTest 1
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -39,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1350914111114960}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.4336605, y: 2.9465094, z: 0}
+  m_LocalPosition: {x: 1.6515926, y: 3.1091964, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -99,25 +98,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_player: {fileID: 114741073431274248}
-  m_fireKey: P1_Fire
-  m_fire2Key: P1_Fire2
-  m_bullet: {fileID: 1888594214103558, guid: 4eeed63d4cbe4fb489db26cb54cdf257, type: 2}
-  m_grenade: {fileID: 1888594214103558, guid: 844e0c5e7a6f4c44ca180db07099114b, type: 2}
+  m_fireKey: P2_Fire
+  m_fire2Key: P2_Fire2
+  m_bullet: {fileID: 1888594214103558, guid: c9ecb76fa5a94ee49afd84a8750f5aa5, type: 2}
+  m_grenade: {fileID: 1888594214103558, guid: 2d6e36857941a09429dd0deed9749f74, type: 2}
   m_fireRate: 1
   m_bulletSpeed: 80
-  m_currentGun: 0
---- !u!114 &114492979215944292
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1350914111114960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a3615e5e1aa51b4a804ff22bab1db63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 0
+  m_currentGun: 1
 --- !u!114 &114741073431274248
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -146,9 +133,9 @@ MonoBehaviour:
   m_speed: 5
   m_dirX: 0
   m_dirY: 0
-  m_iHorizontal: P1_Horizontal
-  m_iVertical: P1_Vertical
-  m_iJump: P1_Jump
+  m_iHorizontal: P2_Horizontal
+  m_iVertical: P2_Vertical
+  m_iJump: P2_Jump
 --- !u!212 &212056726826186616
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -182,7 +169,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 68fdf92c5397ba54cb7d51f6e15f7b25, type: 3}
-  m_Color: {r: 0.19817454, g: 1, b: 0.13235295, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

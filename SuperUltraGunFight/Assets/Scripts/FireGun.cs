@@ -17,8 +17,8 @@ public class FireGun : MonoBehaviour
     public float m_fireRate;
     public float m_bulletSpeed;
     bool m_active = true;
-    GunType m_currentGun=GunType.shotgun;
-    enum GunType
+    public GunType m_currentGun=GunType.shotgun;
+    public enum GunType
     {
         pistol,
         shotgun,

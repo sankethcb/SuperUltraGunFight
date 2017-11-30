@@ -9,7 +9,7 @@ public class ScoreManager : MonoBehaviour
 
     Text player1Score;
     Text player2Score;
-    Text player3Score;
+    //Text player3Score;
 
     Transform player1Wins;
     Transform player2Wins;
@@ -18,26 +18,26 @@ public class ScoreManager : MonoBehaviour
 
     public GameObject player1;
     public GameObject player2;
-    public GameObject player3;
+    //public GameObject player3;
 
     int player1ScoreVal;
     int player2ScoreVal;
-    int player3ScoreVal;
+    //int player3ScoreVal;
 
     // Use this for initialization
     void Start()
     {
         player1 = GameObject.FindGameObjectWithTag("Player1");
         player2 = GameObject.FindGameObjectWithTag("Player2");
-        player3 = GameObject.FindGameObjectWithTag("Player3");
+        //player3 = GameObject.FindGameObjectWithTag("Player3");
 
         player1Score = myCanvas.transform.Find("Player1 Score").GetComponent<Text>();
         player2Score = myCanvas.transform.Find("Player2 Score").GetComponent<Text>();
-        player3Score = myCanvas.transform.Find("Player3 Score").GetComponent<Text>();
+        //player3Score = myCanvas.transform.Find("Player3 Score").GetComponent<Text>();
 
         player1Wins = myCanvas.transform.Find("Player1 Wins");
         player2Wins = myCanvas.transform.Find("Player2 Wins");
-        player3Wins = myCanvas.transform.Find("Player3 Wins");
+        //player3Wins = myCanvas.transform.Find("Player3 Wins");
         BackToSelectionButton = myCanvas.transform.Find("BackToSelectionButton");
     }
 
@@ -64,32 +64,32 @@ public class ScoreManager : MonoBehaviour
             player2ScoreVal = 0;
             player2Score.text = "0";
         }
-        if (player3 != null)
-        {
-            player3ScoreVal = player3.GetComponent<PlayerScore>().score;
-            player3Score.text = player3ScoreVal.ToString();
-        }
-        else
-        {
-            player3ScoreVal = 0;
-            player3Score.text = "0";
-        }
+        //if (player3 != null)
+        //{
+        //    player3ScoreVal = player3.GetComponent<PlayerScore>().score;
+        //    player3Score.text = player3ScoreVal.ToString();
+        //}
+        //else
+        //{
+        //    player3ScoreVal = 0;
+        //    player3Score.text = "0";
+        //}
         
-        //If 2 out of 3 players have 0 score, the other one wins
-        if (player1ScoreVal == 0 && player2ScoreVal == 0)
-        {
-            player3Wins.gameObject.SetActive(true);
-            BackToSelectionButton.gameObject.SetActive(true);
-        }
-        else if (player1ScoreVal == 0 && player3ScoreVal == 0)
-        {
-            player2Wins.gameObject.SetActive(true);
-            BackToSelectionButton.gameObject.SetActive(true);
-        }
-        else if (player2ScoreVal == 0 && player3ScoreVal == 0)
-        {
-            player1Wins.gameObject.SetActive(true);
-            BackToSelectionButton.gameObject.SetActive(true);
-        }
+        ////If 2 out of 3 players have 0 score, the other one wins
+        //if (player1ScoreVal == 0 && player2ScoreVal == 0)
+        //{
+        //    player3Wins.gameObject.SetActive(true);
+        //    BackToSelectionButton.gameObject.SetActive(true);
+        //}
+        //else if (player1ScoreVal == 0 && player3ScoreVal == 0)
+        //{
+        //    player2Wins.gameObject.SetActive(true);
+        //    BackToSelectionButton.gameObject.SetActive(true);
+        //}
+        //else if (player2ScoreVal == 0 && player3ScoreVal == 0)
+        //{
+        //    player1Wins.gameObject.SetActive(true);
+        //    BackToSelectionButton.gameObject.SetActive(true);
+        //}
     }
 }
