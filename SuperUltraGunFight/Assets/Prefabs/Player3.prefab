@@ -23,9 +23,10 @@ GameObject:
   - component: {fileID: 61377219885391874}
   - component: {fileID: 114668713022099868}
   - component: {fileID: 114729610028860798}
+  - component: {fileID: 114470547601044152}
   m_Layer: 0
   m_Name: Player3
-  m_TagString: Player1
+  m_TagString: Player3
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -37,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1823024966780238}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 2.55, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -68,6 +69,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.4}
   m_EdgeRadius: 0
+--- !u!114 &114470547601044152
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1823024966780238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a3615e5e1aa51b4a804ff22bab1db63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 10
 --- !u!114 &114668713022099868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -96,9 +109,9 @@ MonoBehaviour:
   m_speed: 5
   m_dirX: 0
   m_dirY: 0
-  m_iHorizontal: P1_Horizontal
-  m_iVertical: P1_Vertical
-  m_iJump: P1_Jump
+  m_iHorizontal: P3_Horizontal
+  m_iVertical: P3_Vertical
+  m_iJump: P3_Jump
 --- !u!114 &114729610028860798
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -99,7 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 114349219ed6468448b3fbeded8db657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_killTag: Player1
+  m_killTag:
+  - Player1
+  - Player2
 --- !u!212 &212272314922516916
 SpriteRenderer:
   m_ObjectHideFlags: 1

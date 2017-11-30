@@ -8,16 +8,26 @@
 public class Bullet : MonoBehaviour
 {
     #region Bullet Members
-    public string m_killTag;
+    public string[] m_killTag;
     #endregion
 
     #region Bullet Methods
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.gameObject.tag == m_killTag)
+        for (int i = 0; i < m_killTag.Length; i++)
         {
-            collision.gameObject.transform.position = new Vector3(0, 6, 0);
-            //Destroy(collision.collider.gameObject);
+            if (collision.collider.gameObject.tag == m_killTag[i])
+            {
+                collision.gameObject.GetComponent<PlayerScore>().score -= 1;
+                if (collision.gameObject.GetComponent<PlayerScore>().score > 0)
+                {
+                    collision.gameObject.transform.position = new Vector3(0, 6, 0);
+                }
+                else
+                {
+                    Destroy(collision.collider.gameObject);
+                }
+            }
         }
     }
     #endregion
