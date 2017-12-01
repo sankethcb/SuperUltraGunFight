@@ -3,7 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Author: Dante Nardo
-/// Last Modified: 11/29/2017
+/// Last Modified: 11/30/2017
 /// Purpose: Handles the basic movement and collisions of all controllers.
 /// </summary>
 [RequireComponent(typeof(BoxCollider2D))]
@@ -70,12 +70,12 @@ public class Controller2D : MonoBehaviour
     #endregion
 
     #region Controller2D Methods
-    private void Awake()
+    protected void Awake()
     {
         m_collider = GetComponent<BoxCollider2D>();
     }
 
-    private void Start()
+    protected void Start()
     {
         CalculateRaycastOrigins();
         CalculateRaycastCount();

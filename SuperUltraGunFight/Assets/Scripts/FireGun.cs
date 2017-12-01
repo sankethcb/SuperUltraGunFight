@@ -3,9 +3,10 @@ using UnityEngine;
 
 /// <summary>
 /// Author: Sanketh Bhat
-/// Last Modified: 11/15/2017
+/// Last Modified: 11/30/2017
 /// Purpose: Fires a bullet when the correct key is pressed.
 /// </summary>
+[RequireComponent(typeof(PlayerController))]
 public class FireGun : MonoBehaviour
 {
     #region FireGun Members
@@ -17,51 +18,78 @@ public class FireGun : MonoBehaviour
     public float m_fireRate;
     public float m_bulletSpeed;
     bool m_active = true;
-    public GunType m_currentGun=GunType.shotgun;
+    public GunType m_currentGun=GunType.SHOTGUN;
     public enum GunType
     {
-        pistol,
-        shotgun,
-        smg,
-        rifle
-
+        PISTOL,
+        SHOTGUN,
+        SMG,
+        RIFLE
     };
 
     #endregion
 
     #region FireGun Methods
-    void Start()
+    private void Start()
     {
         m_player = GetComponent<PlayerController>();
     }
-    
-    void Update()
+
+    private void Update()
     {
         if (Input.GetButton(m_fireKey) && m_active)
         {
-
-        switch(m_currentGun)
+            // Add shooting to player state
+            switch (m_player.m_playerState)
             {
-                case GunType.pistol: FirePistol();
+                case PlayerController.PlayerState.IDLE:
+                    m_player.m_playerState = PlayerController.PlayerState.IDLE_SHOOT;
                     break;
-                case GunType.shotgun:
+                case PlayerController.PlayerState.RUN:
+                    m_player.m_playerState = PlayerController.PlayerState.RUN_SHOOT;
+                    break;
+                case PlayerController.PlayerState.JUMP:
+                    m_player.m_playerState = PlayerController.PlayerState.JUMP_SHOOT;
+                    break;
+            }
+
+            switch(m_currentGun)
+            {
+                case GunType.PISTOL:
+                    FirePistol();
+                    break;
+                case GunType.SHOTGUN:
                     FireShotgun();
                     break;
-                case GunType.smg:
+                case GunType.SMG:
                     FireSmg();
                     break;
-                case GunType.rifle:
+                case GunType.RIFLE:
                     FireRifle();
                     break;
             }
         }
         if (Input.GetButtonDown(m_fire2Key) && m_active)
         {
+            // Add shooting to player state
+            switch (m_player.m_playerState)
+            {
+                case PlayerController.PlayerState.IDLE:
+                    m_player.m_playerState = PlayerController.PlayerState.IDLE_SHOOT;
+                    break;
+                case PlayerController.PlayerState.RUN:
+                    m_player.m_playerState = PlayerController.PlayerState.RUN_SHOOT;
+                    break;
+                case PlayerController.PlayerState.JUMP:
+                    m_player.m_playerState = PlayerController.PlayerState.JUMP_SHOOT;
+                    break;
+            }
+
             Fire2();
         }
     }
-    
-    void FirePistol()
+
+    private void FirePistol()
     {
         GameObject firedBullet = Instantiate(m_bullet, new Vector3( transform.position.x + m_player.m_dirX*.3f, transform.position.y , 0), Quaternion.identity);
         Physics2D.IgnoreCollision(firedBullet.GetComponent<BoxCollider2D>(), GetComponent<BoxCollider2D>());
@@ -72,7 +100,7 @@ public class FireGun : MonoBehaviour
         StartCoroutine("Reload");
     }
 
-    void FireShotgun()
+    private void FireShotgun()
     {
         GameObject firedBullet1 = Instantiate(m_bullet, new Vector3(transform.position.x + m_player.m_dirX * .3f, transform.position.y, 0), Quaternion.identity);
         GameObject firedBullet2 = Instantiate(m_bullet, new Vector3(transform.position.x + m_player.m_dirX * .3f, transform.position.y, 0), Quaternion.identity);
@@ -103,7 +131,7 @@ public class FireGun : MonoBehaviour
         StartCoroutine("Reload");
     }
 
-    void FireSmg()
+    private void FireSmg()
     {
         GameObject firedBullet = Instantiate(m_bullet, new Vector3(transform.position.x + m_player.m_dirX * .3f, transform.position.y, 0), Quaternion.identity);
         firedBullet.transform.localScale = firedBullet.transform.localScale * 0.3f;
@@ -115,7 +143,7 @@ public class FireGun : MonoBehaviour
         StartCoroutine("Reload");
     }
 
-    void FireRifle()
+    private void FireRifle()
     {
         GameObject firedBullet = Instantiate(m_bullet, new Vector3(transform.position.x + m_player.m_dirX * .3f, transform.position.y, 0), Quaternion.identity);
         firedBullet.transform.localScale = firedBullet.transform.localScale * 0.8f;
@@ -128,7 +156,7 @@ public class FireGun : MonoBehaviour
         StartCoroutine("Reload");
     }
 
-    void Fire()
+    private void Fire()
     {
         GameObject firedBullet = Instantiate(m_bullet, new Vector3(transform.position.x + m_player.m_dirX * .3f, transform.position.y, 0), Quaternion.identity);
         Physics2D.IgnoreCollision(firedBullet.GetComponent<BoxCollider2D>(), GetComponent<BoxCollider2D>());
@@ -138,7 +166,8 @@ public class FireGun : MonoBehaviour
         m_active = false;
         StartCoroutine("Reload");
     }
-    void Fire2()
+
+    private void Fire2()
     {
         GameObject firedBullet = Instantiate(m_grenade, new Vector3(transform.position.x + m_player.m_dirX * .3f, transform.position.y, 0), Quaternion.identity);
         Physics2D.IgnoreCollision(firedBullet.GetComponent<BoxCollider2D>(), GetComponent<BoxCollider2D>());
@@ -149,9 +178,7 @@ public class FireGun : MonoBehaviour
         StartCoroutine("Reload");
     }
 
-
-
-    IEnumerator Reload()
+    private IEnumerator Reload()
     {
         yield return new WaitForSeconds(m_fireRate);
         m_active = true;

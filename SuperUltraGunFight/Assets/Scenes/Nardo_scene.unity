@@ -497,7 +497,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.4, y: 0.4}
   m_EdgeRadius: 0
---- !u!1001 &1812703307
+--- !u!1001 &1412397285
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -536,6 +536,27 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 95519410456451228, guid: fbbefb31e19d96848b78684c11857121,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114741073431274248, guid: fbbefb31e19d96848b78684c11857121,
+        type: 2}
+      propertyPath: m_playerAnimator
+      value: 
+      objectReference: {fileID: 2048633613}
+    - target: {fileID: 114602894616174876, guid: fbbefb31e19d96848b78684c11857121,
+        type: 2}
+      propertyPath: m_shootTime
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fbbefb31e19d96848b78684c11857121, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &2048633613 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114602894616174876, guid: fbbefb31e19d96848b78684c11857121,
+    type: 2}
+  m_PrefabInternal: {fileID: 1412397285}
+  m_Script: {fileID: 11500000, guid: 18299345423db6c4da7d590c6dfc78ec, type: 3}
