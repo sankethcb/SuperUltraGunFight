@@ -25,10 +25,19 @@ public class Bullet : MonoBehaviour
                 }
                 else
                 {
-                    Destroy(collision.collider.gameObject);
+                    Destroy(collision.gameObject);
+                    
                 }
+                Destroy(gameObject);
             }
         }
+
+        if(collision.gameObject.tag == "Map")
+        {
+            Destroy(gameObject);
+        }
     }
+
+
     #endregion
 }

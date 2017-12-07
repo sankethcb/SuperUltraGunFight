@@ -19,13 +19,7 @@ public class FireGun : MonoBehaviour
     public float m_bulletSpeed;
     bool m_active = true;
     public GunType m_currentGun=GunType.SHOTGUN;
-    public enum GunType
-    {
-        PISTOL,
-        SHOTGUN,
-        SMG,
-        RIFLE
-    };
+
 
     #endregion
 
@@ -178,10 +172,19 @@ public class FireGun : MonoBehaviour
         StartCoroutine("Reload");
     }
 
+ 
+   
+
     private IEnumerator Reload()
     {
         yield return new WaitForSeconds(m_fireRate);
         m_active = true;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Debug.Log("Hit");
+    }
+
     #endregion
 }
