@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 114177702210541788}
   - component: {fileID: 95519410456451228}
   - component: {fileID: 114492979215944292}
+  - component: {fileID: 50834501756419258}
   m_Layer: 0
   m_Name: PlayerTest
   m_TagString: Player1
@@ -46,6 +47,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &50834501756419258
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1350914111114960}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &61984329828341476
 BoxCollider2D:
   m_ObjectHideFlags: 1
@@ -133,6 +154,9 @@ MonoBehaviour:
   m_player: {fileID: 114741073431274248}
   m_sprRender: {fileID: 212056726826186616}
   m_fps: 30
+  m_running: 0
+  m_shooting: 0
+  m_shootTime: 0
   m_playerIdle: {fileID: 21300000, guid: 68fdf92c5397ba54cb7d51f6e15f7b25, type: 3}
   m_playerIdleShoot: {fileID: 21300000, guid: c7d01c1e25ac8a54f8255f9844e9734e, type: 3}
   m_playerRun:
@@ -175,6 +199,7 @@ MonoBehaviour:
   m_speed: 5
   m_dirX: 0
   m_dirY: 0
+  m_playerAnimator: {fileID: 0}
   m_iHorizontal: P1_Horizontal
   m_iVertical: P1_Vertical
   m_iJump: P1_Jump
