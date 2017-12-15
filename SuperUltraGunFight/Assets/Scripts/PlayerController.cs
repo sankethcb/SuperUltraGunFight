@@ -15,6 +15,7 @@ public class PlayerController : Controller2D
     public string m_iHorizontal;
     public string m_iVertical;
     public string m_iJump;
+    public AudioClip m_aJump;
 
     public PlayerState m_playerState;
     public enum PlayerState
@@ -119,6 +120,7 @@ public class PlayerController : Controller2D
         {
             m_playerState = PlayerState.JUMP;
             JumpInputDown();
+           
         }
 
         
@@ -139,6 +141,8 @@ public class PlayerController : Controller2D
             m_canJump = false;
             m_jumping = true;
             m_jumpedLast = true;
+            GetComponent<AudioSource>().clip = m_aJump;
+            GetComponent<AudioSource>().Play();
         }
     }
 

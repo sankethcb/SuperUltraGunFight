@@ -17,6 +17,8 @@ public class FireGun : MonoBehaviour
     public GameObject m_grenade;
     public float m_fireRate;
     public float m_bulletSpeed;
+    public AudioClip m_aFire1;
+    public AudioClip m_aFire2;
     bool m_active = true;
     public GunType m_currentGun=GunType.SHOTGUN;
 
@@ -89,6 +91,9 @@ public class FireGun : MonoBehaviour
         Physics2D.IgnoreCollision(firedBullet.GetComponent<BoxCollider2D>(), GetComponent<BoxCollider2D>());
         firedBullet.GetComponent<Rigidbody2D>().velocity=(transform.right * m_player.m_dirX * 30);
         firedBullet.transform.localScale = firedBullet.transform.localScale * 0.5f;
+
+        GetComponent<AudioSource>().clip = m_aFire1;
+        GetComponent<AudioSource>().Play();
         Destroy(firedBullet, 5);
         m_active = false;
         StartCoroutine("Reload");
@@ -117,7 +122,10 @@ public class FireGun : MonoBehaviour
         Physics2D.IgnoreCollision(firedBullet1.GetComponent<BoxCollider2D>(), firedBullet2.GetComponent<BoxCollider2D>());
         Physics2D.IgnoreCollision(firedBullet1.GetComponent<BoxCollider2D>(), firedBullet3.GetComponent<BoxCollider2D>());
         Physics2D.IgnoreCollision(firedBullet2.GetComponent<BoxCollider2D>(), firedBullet3.GetComponent<BoxCollider2D>());
-
+        GetComponent<AudioSource>().clip = m_aFire2;
+        GetComponent<AudioSource>().pitch = 0.5f;
+        GetComponent<AudioSource>().Play();
+        m_fireRate = 1.0f;
         Destroy(firedBullet1, 0.2f);
         Destroy(firedBullet2, 0.2f);
         Destroy(firedBullet3, 0.2f);
@@ -134,6 +142,11 @@ public class FireGun : MonoBehaviour
         m_fireRate = 0.3f;
         Destroy(firedBullet, 3);
         m_active = false;
+
+        GetComponent<AudioSource>().clip = m_aFire1;
+        GetComponent<AudioSource>().pitch = 1.5f;
+        GetComponent<AudioSource>().Play();
+      
         StartCoroutine("Reload");
     }
 
@@ -144,22 +157,16 @@ public class FireGun : MonoBehaviour
         m_fireRate = 3;
         Physics2D.IgnoreCollision(firedBullet.GetComponent<BoxCollider2D>(), GetComponent<BoxCollider2D>());
         firedBullet.GetComponent<Rigidbody2D>().velocity = (transform.right * m_player.m_dirX * 60);
-
+        GetComponent<AudioSource>().clip = m_aFire2;
+        GetComponent<AudioSource>().pitch = 2.0f;
+        GetComponent<AudioSource>().Play();
+        
         Destroy(firedBullet, 2);
         m_active = false;
         StartCoroutine("Reload");
     }
 
-    private void Fire()
-    {
-        GameObject firedBullet = Instantiate(m_bullet, new Vector3(transform.position.x + m_player.m_dirX * .3f, transform.position.y, 0), Quaternion.identity);
-        Physics2D.IgnoreCollision(firedBullet.GetComponent<BoxCollider2D>(), GetComponent<BoxCollider2D>());
-        firedBullet.GetComponent<Rigidbody2D>().velocity = (transform.right * m_player.m_dirX * m_bulletSpeed);
 
-        Destroy(firedBullet, 5);
-        m_active = false;
-        StartCoroutine("Reload");
-    }
 
     private void Fire2()
     {
@@ -179,6 +186,7 @@ public class FireGun : MonoBehaviour
     {
         yield return new WaitForSeconds(m_fireRate);
         m_active = true;
+        GetComponent<AudioSource>().pitch = 1.0f;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
