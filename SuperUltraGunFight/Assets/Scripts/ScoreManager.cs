@@ -20,8 +20,8 @@ public class ScoreManager : MonoBehaviour
     public GameObject player2;
     //public GameObject player3;
 
-    int player1ScoreVal;
-    int player2ScoreVal;
+    public int player1ScoreVal = 10;
+    public int player2ScoreVal = 10;
     //int player3ScoreVal;
 
     // Use this for initialization

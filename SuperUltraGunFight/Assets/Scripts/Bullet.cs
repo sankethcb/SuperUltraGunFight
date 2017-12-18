@@ -28,7 +28,8 @@ public class Bullet : MonoBehaviour
                     Destroy(collision.gameObject);
                     
                 }
-                Destroy(gameObject);
+                if(gameObject.name != "KillFloor")
+                     Destroy(gameObject);
             }
         }
 
