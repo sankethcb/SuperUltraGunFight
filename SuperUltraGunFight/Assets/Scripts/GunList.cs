@@ -16,7 +16,8 @@ public enum GunType
     PISTOL,
     SHOTGUN,
     SMG,
-    RIFLE
+    RIFLE,
+    GRENADE
 };
 
 

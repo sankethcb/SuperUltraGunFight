@@ -102,6 +102,8 @@ MonoBehaviour:
   m_killTag:
   - Player2
   - Player1
+  Dammage: 10
+  spawner: {fileID: 0}
 --- !u!212 &212315218356150654
 SpriteRenderer:
   m_ObjectHideFlags: 1

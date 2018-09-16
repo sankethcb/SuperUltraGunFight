@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour {
         int newLevel;
         do
         {
-            newLevel = Random.Range(0, 2);
+            newLevel = Random.Range(1, 6);
         } while (newLevel == currentLevel);
         currentLevel = newLevel;
         gameplay = true;

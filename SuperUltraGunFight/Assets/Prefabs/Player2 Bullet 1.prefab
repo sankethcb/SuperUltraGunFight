@@ -131,6 +131,8 @@ MonoBehaviour:
   m_killTag:
   - Player1
   - Player3
+  Dammage: 0
+  spawner: {fileID: 1432353928718376, guid: 327c4f0c310fd054aaadfc90d812c0be, type: 2}
 --- !u!212 &212699364355023568
 SpriteRenderer:
   m_ObjectHideFlags: 1

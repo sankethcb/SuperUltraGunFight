@@ -9,6 +9,7 @@ TagManager:
   - Player3
   - Spawner
   - Map
+  - Player4
   layers:
   - Default
   - TransparentFX

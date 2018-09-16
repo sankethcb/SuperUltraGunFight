@@ -129,8 +129,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_killTag:
-  - Player1
   - Player2
+  - Player4
+  Dammage: 0
+  spawner: {fileID: 0}
 --- !u!212 &212640778566419412
 SpriteRenderer:
   m_ObjectHideFlags: 1
