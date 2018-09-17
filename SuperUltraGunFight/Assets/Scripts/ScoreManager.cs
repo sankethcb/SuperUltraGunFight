@@ -86,6 +86,7 @@ public class ScoreManager : MonoBehaviour
         }
         if (player3 != null) //If the player is not destroyed, get the score and print to the screen
         {
+            
             player3ScoreVal = player3.GetComponent<PlayerScore>().score;
             player3Score.text = player3ScoreVal.ToString();
         }
